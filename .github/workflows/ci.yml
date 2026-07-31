@@ -26,14 +26,14 @@ jobs:
         run: npm run build
 
       - name: Validate manifest
-        run: npx streamdeck validate com.saeedkolivand.claude-usage.sdPlugin
+        run: npx streamdeck validate com.ffapd1989.claude-usage-br.sdPlugin
 
       - name: Package plugin
-        run: npx streamdeck pack com.saeedkolivand.claude-usage.sdPlugin --output dist --force
+        run: npx streamdeck pack com.ffapd1989.claude-usage-br.sdPlugin --output dist --force
 
       - name: Upload packaged plugin
         uses: actions/upload-artifact@v4
         with:
           name: streamdeck-plugin
-          path: dist/com.saeedkolivand.claude-usage.streamDeckPlugin
+          path: dist/com.ffapd1989.claude-usage-br.streamDeckPlugin
           if-no-files-found: error

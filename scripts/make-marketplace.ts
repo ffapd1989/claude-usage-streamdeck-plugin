@@ -79,7 +79,7 @@ const W = 1920;
 const H = 960;
 
 // Icon — resize the high-res plugin icon to the required 288x288.
-const iconSrc = join(root, "com.saeedkolivand.claude-usage.sdPlugin", "imgs", "plugin-icon@2x.png");
+const iconSrc = join(root, "com.ffapd1989.claude-usage-br.sdPlugin", "imgs", "plugin-icon@2x.png");
 await sharp(iconSrc).resize(288, 288).png().toBuffer().then((buf) => {
   writeFileSync(join(outDir, "icon.png"), buf);
   console.log(`Wrote ${join(outDir, "icon.png")} (288x288, ${(buf.length / 1024).toFixed(0)} KB)`);

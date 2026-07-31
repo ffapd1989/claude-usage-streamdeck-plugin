@@ -1,12 +1,12 @@
 {
   "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
-  "UUID": "com.saeedkolivand.claude-usage",
-  "Name": "AI Coding Usage Meter",
+  "UUID": "com.ffapd1989.claude-usage-br",
+  "Name": "Uso Claude (variante BR)",
   "Version": "1.5.2.0",
-  "Author": "Saeed Kolivand",
-  "Description": "Shows AI coding usage on Stream Deck keys: live session (5h) & weekly (7d) limits, plus tokens and cost parsed from local logs. Works with Claude Code. Windows + macOS.",
-  "URL": "https://github.com/saeedkolivand/claude-usage-streamdeck-plugin",
-  "Category": "AI Coding Usage Meter",
+  "Author": "ffapd1989 (fork de Saeed Kolivand)",
+  "Description": "Variante BR do AI Coding Usage Meter: carrossel 5 horas ↔ Semanal com % grande e reset, além dos medidores originais. Funciona com Claude Code. Windows + macOS.",
+  "URL": "https://github.com/ffapd1989/claude-usage-streamdeck-plugin",
+  "Category": "Uso Claude (variante BR)",
   "CategoryIcon": "imgs/category-icon",
   "Icon": "imgs/plugin-icon",
   "SDKVersion": 3,
@@ -30,10 +30,10 @@
   "CodePath": "bin/plugin.js",
   "Actions": [
     {
-      "Name": "Usage Meter",
-      "UUID": "com.saeedkolivand.claude-usage.meter",
+      "Name": "Medidor de Uso",
+      "UUID": "com.ffapd1989.claude-usage-br.meter",
       "Icon": "imgs/actions/meter/icon",
-      "Tooltip": "Show a Claude usage meter: Session/Weekly limits, or tokens/cost (today or session).",
+      "Tooltip": "Medidor de uso do Claude: carrossel 5 horas ↔ Semanal, limites ao vivo ou tokens/custo dos logs locais.",
       "PropertyInspectorPath": "ui/inspector.html",
       "Controllers": [
         "Keypad"

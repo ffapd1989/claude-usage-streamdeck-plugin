@@ -6,7 +6,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "node scripts/sync-version.mjs ${nextRelease.version} && npm run build && npx streamdeck pack com.saeedkolivand.claude-usage.sdPlugin --output dist --force"
+        "prepareCmd": "node scripts/sync-version.mjs ${nextRelease.version} && npm run build && npx streamdeck pack com.ffapd1989.claude-usage-br.sdPlugin --output dist --force"
       }
     ],
     [
@@ -14,7 +14,7 @@
       {
         "assets": [
           {
-            "path": "dist/com.saeedkolivand.claude-usage.streamDeckPlugin",
+            "path": "dist/com.ffapd1989.claude-usage-br.streamDeckPlugin",
             "label": "AI Coding Usage Meter ${nextRelease.version} (.streamDeckPlugin)"
           }
         ]
@@ -25,8 +25,8 @@
       {
         "assets": [
           "package.json",
-          "com.saeedkolivand.claude-usage.sdPlugin/manifest.json",
-          "com.saeedkolivand.claude-usage.sdPlugin/bin/plugin.js"
+          "com.ffapd1989.claude-usage-br.sdPlugin/manifest.json",
+          "com.ffapd1989.claude-usage-br.sdPlugin/bin/plugin.js"
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
