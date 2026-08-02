@@ -21,7 +21,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pkgPath = join(root, "package.json");
 const manifestPath = join(
   root,
-  "com.saeedkolivand.claude-usage.sdPlugin",
+  "com.ffapd1989.claude-usage-br.sdPlugin",
   "manifest.json"
 );
 

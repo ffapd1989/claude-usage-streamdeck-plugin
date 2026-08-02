@@ -3,7 +3,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-ROOT = os.path.join(os.path.dirname(__file__), "com.saeedkolivand.claude-usage.sdPlugin", "imgs")
+ROOT = os.path.join(os.path.dirname(__file__), "com.ffapd1989.claude-usage-br.sdPlugin", "imgs")
 # ponytail: try Linux/WSL then Windows bold sans, fall back to PIL's default
 FONTS = [
     "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
