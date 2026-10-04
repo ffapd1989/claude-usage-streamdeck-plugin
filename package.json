@@ -14,11 +14,11 @@
     "marketplace": "esbuild scripts/make-marketplace.ts --bundle --platform=node --target=node20 --format=esm --external:sharp --outfile=scripts/.make-marketplace.mjs && node scripts/.make-marketplace.mjs"
   },
   "dependencies": {
-    "@elgato/streamdeck": "^2.1.0",
+    "@elgato/streamdeck": "^3.0.1",
     "sharp": "^0.35.3"
   },
   "devDependencies": {
-    "@elgato/cli": "^1.7.4",
+    "@elgato/cli": "^1.10.1",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^11.0.1",
     "@types/node": "^20.19.43",

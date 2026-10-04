@@ -3957,13 +3957,15 @@ var EventEmitter = class {
   }
 };
 
-// node_modules/@elgato/utils/dist/objects.js
+// node_modules/@elgato/utils/dist/objects/freeze.js
 function freeze(value) {
   if (value !== void 0 && value !== null && typeof value === "object" && !Object.isFrozen(value)) {
     Object.freeze(value);
     Object.values(value).forEach(freeze);
   }
 }
+
+// node_modules/@elgato/utils/dist/objects/get.js
 function get(source, path5) {
   const props = path5.split(".");
   return props.reduce((obj, prop) => obj && obj[prop], source);
@@ -5000,10 +5002,10 @@ function jsonStringifyReplacer(_, value) {
   return value;
 }
 function cached(getter) {
-  const set2 = false;
+  const set3 = false;
   return {
     get value() {
-      if (!set2) {
+      if (!set3) {
         const value = getter();
         Object.defineProperty(this, "value", { value });
         return value;
@@ -5029,10 +5031,10 @@ function floatSafeRemainder(val, step) {
   return valInt % stepInt / 10 ** decCount;
 }
 function defineLazy(object2, key, getter) {
-  const set2 = false;
+  const set3 = false;
   Object.defineProperty(object2, key, {
     get() {
-      if (!set2) {
+      if (!set3) {
         const value = getter();
         object2[key] = value;
         return value;
@@ -15891,9 +15893,6 @@ var softwareMinimumVersion = new Lazy(() => {
   }
   return new Version(manifest.value.Software.MinimumVersion);
 });
-function getSDKVersion() {
-  return manifest.value?.SDKVersion ?? null;
-}
 function getSoftwareMinimumVersion() {
   return softwareMinimumVersion.value;
 }
@@ -15904,12 +15903,59 @@ function getManifest() {
 // node_modules/@elgato/streamdeck/dist/plugin/settings.js
 var import_node_crypto = require("node:crypto");
 
+// node_modules/@elgato/streamdeck/dist/plugin/actions/cache.js
+var SettingsCache = class {
+  /**
+   * Underlying map of action ID to cached settings.
+   */
+  #entries = /* @__PURE__ */ new Map();
+  /**
+   * Clears the cached settings.
+   */
+  clear() {
+    this.#entries.clear();
+  }
+  /**
+   * Removes the cached settings for the specified action.
+   * @param id Action instance identifier.
+   */
+  delete(id) {
+    this.#entries.delete(id);
+  }
+  /**
+   * Gets the cached settings for the specified action.
+   * @param id Action instance identifier.
+   * @returns The cached settings when present; otherwise `undefined`.
+   */
+  get(id) {
+    const settings2 = this.#entries.get(id);
+    return settings2 !== void 0 ? structuredClone(settings2) : void 0;
+  }
+  /**
+   * Sets the cached settings for the specified action.
+   * @param id Action instance identifier.
+   * @param settings The settings to cache.
+   */
+  set(id, settings2) {
+    this.#entries.set(id, structuredClone(settings2));
+  }
+};
+var settingsCache = new SettingsCache();
+
 // node_modules/@elgato/streamdeck/dist/plugin/actions/config.js
 var actionConfig = {
   /**
-   * Determines whether settings requests should use message identifiers and action settings cache behavior.
+   * Determines the behavior of when `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are fired.
+   *
+   * - `false` (default) — `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are only fired
+   * after the settings are updated within the property inspector.
+   * - `true` — `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are fired after the settings
+   * are updated within the property inspector, and after calling `action.getSettings()` and
+   * `streamDeck.settings.getGlobalSettings()` respectively.
+   *
+   * This option replaces `useExperimentalMessageIdentifiers`, with inverted behavior.
    */
-  useExperimentalMessageIdentifiers: false
+  useLegacySettingsBehavior: false
 };
 
 // node_modules/@elgato/streamdeck/dist/plugin/actions/store.js
@@ -16078,12 +16124,6 @@ var SendToPluginEvent = class extends Event {
 };
 
 // node_modules/@elgato/streamdeck/dist/plugin/validation.js
-function requiresSDKVersion(minimumVersion, feature) {
-  const sdkVersion = getSDKVersion();
-  if (sdkVersion !== null && minimumVersion > sdkVersion) {
-    throw new Error(`[ERR_NOT_SUPPORTED]: ${feature} requires manifest SDK version ${minimumVersion} or higher, but found version ${sdkVersion}; please update the "SDKVersion" in the plugin's manifest to ${minimumVersion} or higher.`);
-  }
-}
 function requiresVersion(minimumVersion, streamDeckVersion, feature) {
   const required3 = {
     major: Math.floor(minimumVersion),
@@ -16104,26 +16144,43 @@ function requiresVersion(minimumVersion, streamDeckVersion, feature) {
 // node_modules/@elgato/streamdeck/dist/plugin/settings.js
 var settings = {
   /**
-   * Available from Stream Deck 7.1; determines whether message identifiers should be sent when getting
-   * action-instance or global settings.
+   * Determines the behavior of when `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are fired.
    *
-   * When `true`, the did-receive events associated with settings are only emitted when the action-instance
-   * or global settings are changed in the property inspector.
-   * @returns The value.
+   * - `false` (default) — `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are only fired
+   * after the settings are updated within the property inspector.
+   * - `true` — `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are fired after the settings
+   * are updated within the property inspector, and after calling `action.getSettings()` and
+   * `streamDeck.settings.getGlobalSettings()` respectively.
+   *
+   * This option replaces `useExperimentalMessageIdentifiers`, with inverted behavior.
    */
-  get useExperimentalMessageIdentifiers() {
-    return actionConfig.useExperimentalMessageIdentifiers;
+  get useLegacySettingsBehavior() {
+    return actionConfig.useLegacySettingsBehavior;
   },
   /**
-   * Available from Stream Deck 7.1; determines whether message identifiers should be sent when getting
-   * action-instance or global settings.
+   * Determines the behavior of when `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are fired.
    *
-   * When `true`, the did-receive events associated with settings are only emitted when the action-instance
-   * or global settings are changed in the property inspector.
+   * - `false` (default) — `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are only fired
+   * after the settings are updated within the property inspector.
+   * - `true` — `onDidReceiveSettings` and `onDidReceiveGlobalSettings` are fired after the settings
+   * are updated within the property inspector, and after calling `action.getSettings()` and
+   * `streamDeck.settings.getGlobalSettings()` respectively.
+   *
+   * This option replaces `useExperimentalMessageIdentifiers`, with inverted behavior.
    */
-  set useExperimentalMessageIdentifiers(value) {
-    requiresVersion(7.1, connection.version, "Message identifiers");
-    actionConfig.useExperimentalMessageIdentifiers = value;
+  set useLegacySettingsBehavior(value) {
+    const prev = actionConfig.useLegacySettingsBehavior;
+    if (prev === value) {
+      return;
+    }
+    try {
+      actionConfig.useLegacySettingsBehavior = value;
+      validateSettingsBehavior();
+      settingsCache.clear();
+    } catch (err) {
+      actionConfig.useLegacySettingsBehavior = prev;
+      throw err;
+    }
   },
   /**
    * Gets the global settings associated with the plugin.
@@ -16141,30 +16198,34 @@ var settings = {
     });
   },
   /**
-   * Occurs when the global settings are requested, or when the the global settings were updated in
-   * the property inspector.
+   * Occurs when the global settings are updated within the property inspector.
+   *
+   * When `streamDeck.settings.useLegacySettingsBehavior` is set to `true`, this event will also
+   * occur when calling `getGlobalSettings()`.
    * @template T The type of settings associated with the action.
    * @param listener Function to be invoked when the event occurs.
    * @returns A disposable that removes the listener.
    */
   onDidReceiveGlobalSettings: (listener) => {
     return connection.disposableOn("didReceiveGlobalSettings", (ev) => {
-      if (settings.useExperimentalMessageIdentifiers && ev.id) {
+      if (!settings.useLegacySettingsBehavior && ev.id) {
         return;
       }
       listener(new DidReceiveGlobalSettingsEvent(ev));
     });
   },
   /**
-   * Occurs when the settings associated with an action instance are requested, or when the the settings
-   * were updated in the property inspector.
+   * Occurs when the settings, associated with an action, are updated within the property inspector.
+   *
+   * When `streamDeck.settings.useLegacySettingsBehavior` is set to `true`, this event will also
+   * occur when calling `getSettings()` on an action.
    * @template T The type of settings associated with the action.
    * @param listener Function to be invoked when the event occurs.
    * @returns A disposable that removes the listener.
    */
   onDidReceiveSettings: (listener) => {
     return connection.disposableOn("didReceiveSettings", (ev) => {
-      if (settings.useExperimentalMessageIdentifiers && ev.id) {
+      if (!settings.useLegacySettingsBehavior && ev.id) {
         return;
       }
       const action2 = actionStore.getActionById(ev.context);
@@ -16191,6 +16252,11 @@ var settings = {
     });
   }
 };
+function validateSettingsBehavior() {
+  if (!settings.useLegacySettingsBehavior) {
+    requiresVersion(7.1, connection.version, "Default onDidReceiveSettings/onDidReceiveGlobalSettings behavior");
+  }
+}
 
 // node_modules/@elgato/streamdeck/dist/plugin/ui.js
 var UIController = class {
@@ -16301,42 +16367,6 @@ var UIController = class {
 };
 var ui = new UIController();
 
-// node_modules/@elgato/streamdeck/dist/plugin/actions/action.js
-var import_node_crypto2 = require("node:crypto");
-
-// node_modules/@elgato/streamdeck/dist/plugin/actions/cache.js
-var SettingsCache = class {
-  /**
-   * Underlying map of action ID to cached settings.
-   */
-  #entries = /* @__PURE__ */ new Map();
-  /**
-   * Removes the cached settings for the specified action.
-   * @param id Action instance identifier.
-   */
-  delete(id) {
-    this.#entries.delete(id);
-  }
-  /**
-   * Gets the cached settings for the specified action.
-   * @param id Action instance identifier.
-   * @returns The cached settings when present; otherwise `undefined`.
-   */
-  get(id) {
-    const settings2 = this.#entries.get(id);
-    return settings2 !== void 0 ? structuredClone(settings2) : void 0;
-  }
-  /**
-   * Sets the cached settings for the specified action.
-   * @param id Action instance identifier.
-   * @param settings The settings to cache.
-   */
-  set(id, settings2) {
-    this.#entries.set(id, structuredClone(settings2));
-  }
-};
-var settingsCache = new SettingsCache();
-
 // node_modules/@elgato/streamdeck/dist/plugin/devices/store.js
 var __items2 = /* @__PURE__ */ new Map();
 var ReadOnlyDeviceStore = class extends Enumerable {
@@ -16432,12 +16462,13 @@ var ActionContext = class {
   }
 };
 
-// node_modules/@elgato/streamdeck/dist/plugin/actions/action.js
+// node_modules/@elgato/streamdeck/dist/plugin/actions/action-base.js
+var import_node_crypto2 = require("node:crypto");
 var REQUEST_TIMEOUT = 15 * 1e3;
-var Action = class extends ActionContext {
+var ActionBase = class extends ActionContext {
   /**
-   * Gets the resources (files) associated with this action; these resources are embedded into the
-   * action when it is exported, either individually, or as part of a profile.
+   * Gets the resources (files) associated with this action; these resources are embedded into the action when it is
+   * exported, either individually, or as part of a profile.
    *
    * Available from Stream Deck 7.1.
    * @returns The resources.
@@ -16449,11 +16480,10 @@ var Action = class extends ActionContext {
   }
   /**
    * Gets the settings associated this action instance.
-   * @template U The type of settings associated with the action.D
    * @returns Promise containing the action instance's settings.
    */
   async getSettings() {
-    if (actionConfig.useExperimentalMessageIdentifiers) {
+    if (!actionConfig.useLegacySettingsBehavior) {
       const cached2 = settingsCache.get(this.id);
       if (cached2 !== void 0) {
         logger.trace(JSON.stringify({
@@ -16483,8 +16513,15 @@ var Action = class extends ActionContext {
     return this.controllerType === "Keypad";
   }
   /**
-   * Sets the resources (files) associated with this action; these resources are embedded into the
-   * action when it is exported, either individually, or as part of a profile.
+   * Determines whether this instance is an Infobar.
+   * @returns `true` when this instance is an Infobar; otherwise `false`.
+   */
+  isNeoInfobar() {
+    return this.controllerType === "Neo";
+  }
+  /**
+   * Sets the resources (files) associated with this action; these resources are embedded into the action when it is
+   * exported, either individually, or as part of a profile.
    *
    * Available from Stream Deck 7.1.
    * @example
@@ -16504,7 +16541,7 @@ var Action = class extends ActionContext {
     });
   }
   /**
-   * Sets the settings associated with this action instance. Use in conjunction with {@link Action.getSettings}.
+   * Sets the settings associated with this action instance.
    * @param value Settings to persist.
    * @returns `Promise` resolved when the settings are sent to Stream Deck.
    */
@@ -16514,16 +16551,6 @@ var Action = class extends ActionContext {
       event: "setSettings",
       context: this.id,
       payload: value
-    });
-  }
-  /**
-   * Temporarily shows an alert (i.e. warning), in the form of an exclamation mark in a yellow triangle, on this action instance. Used to provide visual feedback when an action failed.
-   * @returns `Promise` resolved when the request to show an alert has been sent to Stream Deck.
-   */
-  showAlert() {
-    return connection.send({
-      event: "showAlert",
-      context: this.id
     });
   }
   /**
@@ -16555,9 +16582,9 @@ var Action = class extends ActionContext {
 };
 
 // node_modules/@elgato/streamdeck/dist/plugin/actions/dial.js
-var DialAction = class extends Action {
+var DialAction = class extends ActionBase {
   /**
-   * Private backing field for {@link DialAction.coordinates}.
+   * Private backing field for the coordinates.
    */
   #coordinates;
   /**
@@ -16580,7 +16607,7 @@ var DialAction = class extends Action {
   }
   /**
    * Sets the feedback for the current layout associated with this action instance, allowing for the visual items to be updated. Layouts are a powerful way to provide dynamic information
-   * to users, and can be assigned in the manifest, or dynamically via {@link Action.setFeedbackLayout}.
+   * to users, and can be assigned in the manifest, or dynamically via {@link DialAction.setFeedbackLayout}.
    *
    * The {@link feedback} payload defines which items within the layout will be updated, and are identified by their property name (defined as the `key` in the layout's definition).
    * The values can either by a complete new definition, a `string` for layout item types of `text` and `pixmap`, or a `number` for layout item types of `bar` and `gbar`.
@@ -16596,7 +16623,7 @@ var DialAction = class extends Action {
   }
   /**
    * Sets the layout associated with this action instance. The layout must be either a built-in layout identifier, or path to a local layout JSON file within the plugin's folder.
-   * Use in conjunction with {@link Action.setFeedback} to update the layout's current items' settings.
+   * Use in conjunction with {@link DialAction.setFeedback} to update the layout's current items' settings.
    * @param layout Name of a pre-defined layout, or relative path to a custom one.
    * @returns `Promise` resolved when the new layout has been sent to Stream Deck.
    */
@@ -16653,6 +16680,16 @@ var DialAction = class extends Action {
     });
   }
   /**
+   * Shows a temporary alert (i.e. warning) indicator on the touch strip associated with the action.
+   * @returns `Promise` resolved when the request to show an alert has been sent to Stream Deck.
+   */
+  showAlert() {
+    return connection.send({
+      event: "showAlert",
+      context: this.id
+    });
+  }
+  /**
    * @inheritdoc
    */
   toJSON() {
@@ -16664,9 +16701,9 @@ var DialAction = class extends Action {
 };
 
 // node_modules/@elgato/streamdeck/dist/plugin/actions/key.js
-var KeyAction = class extends Action {
+var KeyAction = class extends ActionBase {
   /**
-   * Private backing field for {@link KeyAction.coordinates}.
+   * Private backing field for the coordinates.
    */
   #coordinates;
   /**
@@ -16751,7 +16788,18 @@ var KeyAction = class extends Action {
     });
   }
   /**
-   * Temporarily shows an "OK" (i.e. success), in the form of a check-mark in a green circle, on this action instance. Used to provide visual feedback when an action successfully
+   * Shows a temporary alert (i.e. warning), in the form of an exclamation mark in a yellow triangle, on the key.
+   * @returns `Promise` resolved when the request to show an alert has been sent to Stream Deck.
+   */
+  showAlert() {
+    return connection.send({
+      event: "showAlert",
+      context: this.id
+    });
+  }
+  /**
+   * Temporarily shows an "OK" (i.e. success), in the form of a check-mark in a green circle, on this action instance.
+   * Used to provide visual feedback when an action successfully
    * executed.
    * @returns `Promise` resolved when the request to show an "OK" has been sent to Stream Deck.
    */
@@ -16773,6 +16821,74 @@ var KeyAction = class extends Action {
   }
 };
 
+// node_modules/@elgato/streamdeck/dist/plugin/actions/neo-infobar.js
+var NeoInfobarAction = class extends ActionBase {
+  /**
+   * Private backing field for the coordinates.
+   */
+  #coordinates;
+  /**
+   * Initializes a new instance of the {@see NeoInfobarAction} class.
+   * @param source Source of the action.
+   */
+  constructor(source) {
+    super(source);
+    if (source.payload.controller !== "Neo") {
+      throw new Error("Unable to create NeoInfobarAction; source event controller is not 'Neo'");
+    }
+    this.#coordinates = Object.freeze(source.payload.coordinates);
+  }
+  /**
+   * Coordinates of the Infobar.
+   * @returns The coordinates.
+   */
+  get coordinates() {
+    return this.#coordinates;
+  }
+  /**
+   * Sets the feedback for the current layout associated with this action instance, allowing for the visual items to be
+   * updated. Layouts are a powerful way to provide dynamic information to users, and can be assigned in the manifest,
+   * or dynamically via `setFeedbackLayout`.
+   *
+   * The `feedback` payload defines which items within the layout will be updated, and are identified by their property
+   * name (defined as the `key` in the layout's definition). The values can either be a complete new definition, a `string`
+   * for layout item types of `text` and `pixmap`, or a `number` for layout item types of `bar` and `gbar`.
+   * @param feedback Object containing information about the layout items to be updated.
+   * @returns `Promise` resolved when the request to set the `feedback` has been sent to Stream Deck.
+   */
+  setFeedback(feedback) {
+    return connection.send({
+      event: "setFeedback",
+      context: this.id,
+      payload: feedback
+    });
+  }
+  /**
+   * Sets the layout associated with this action instance. The layout must be a path to a local layout JSON file within
+   * the plugin's folder. Use in conjunction with `setFeedback` to update the layout's current items' settings.
+   * @param layout Relative path to the layout file.
+   * @returns `Promise` resolved when the new layout has been sent to Stream Deck.
+   */
+  setFeedbackLayout(layout) {
+    return connection.send({
+      event: "setFeedbackLayout",
+      context: this.id,
+      payload: {
+        layout
+      }
+    });
+  }
+  /**
+   * @inheritdoc
+   */
+  toJSON() {
+    return {
+      ...super.toJSON(),
+      coordinates: this.coordinates
+    };
+  }
+};
+
 // node_modules/@elgato/streamdeck/dist/plugin/actions/service.js
 var manifest2 = new Lazy(() => getManifest());
 var ActionService = class extends ReadOnlyActionStore {
@@ -16782,14 +16898,14 @@ var ActionService = class extends ReadOnlyActionStore {
   constructor() {
     super();
     connection.prependListener("willAppear", (ev) => {
-      const action2 = ev.payload.controller === "Encoder" ? new DialAction(ev) : new KeyAction(ev);
+      const action2 = this.#createAction(ev);
       actionStore.set(action2);
-      if (actionConfig.useExperimentalMessageIdentifiers) {
+      if (!actionConfig.useLegacySettingsBehavior) {
         settingsCache.set(ev.context, ev.payload.settings);
       }
     });
     connection.prependListener("didReceiveSettings", (ev) => {
-      if (actionConfig.useExperimentalMessageIdentifiers) {
+      if (!actionConfig.useLegacySettingsBehavior) {
         settingsCache.set(ev.context, ev.payload.settings);
       }
     });
@@ -16841,7 +16957,7 @@ var ActionService = class extends ReadOnlyActionStore {
     });
   }
   /**
-   * Occurs when the resources were updated within the property inspector.
+   * Occurs when the resources are updated within the property inspector.
    * @param listener Function to be invoked when the event occurs.
    * @returns A disposable that, when disposed, removes the listener.
    */
@@ -16885,7 +17001,7 @@ var ActionService = class extends ReadOnlyActionStore {
     });
   }
   /**
-   * Occurs when the user updates an action's title settings in the Stream Deck application. See also {@link Action.setTitle}.
+   * Occurs when the user updates an action's title settings in the Stream Deck application.
    * @template T The type of settings associated with the action.
    * @param listener Function to be invoked when the event occurs.
    * @returns A disposable that, when disposed, removes the listener.
@@ -16983,6 +17099,21 @@ var ActionService = class extends ReadOnlyActionStore {
     route(this.onTouchTap, action2.onTouchTap);
     route(this.onWillAppear, action2.onWillAppear);
     route(this.onWillDisappear, action2.onWillDisappear);
+  }
+  /**
+   * Creates an instance of an action from its associated controller.
+   * @param ev Event that contains the controller.
+   * @returns The action instance.
+   */
+  #createAction(ev) {
+    switch (ev.payload.controller) {
+      case "Encoder":
+        return new DialAction(ev);
+      case "Neo":
+        return new NeoInfobarAction(ev);
+      default:
+        return new KeyAction(ev);
+    }
   }
 };
 var actionService = new ActionService();
@@ -17163,7 +17294,6 @@ function switchToProfile(deviceId, profile, page) {
 // node_modules/@elgato/streamdeck/dist/plugin/system.js
 var system_exports = {};
 __export(system_exports, {
-  getSecrets: () => getSecrets,
   onApplicationDidLaunch: () => onApplicationDidLaunch,
   onApplicationDidTerminate: () => onApplicationDidTerminate,
   onDidReceiveDeepLink: () => onDidReceiveDeepLink,
@@ -17189,17 +17319,6 @@ function openUrl(url2) {
     payload: {
       url: url2
     }
-  });
-}
-function getSecrets() {
-  requiresVersion(6.9, connection.version, "Secrets");
-  requiresSDKVersion(3, "Secrets");
-  return new Promise((resolve2) => {
-    connection.once("didReceiveSecrets", (ev) => resolve2(ev.payload.secrets));
-    connection.send({
-      event: "getSecrets",
-      context: connection.registrationParameters.pluginUUID
-    });
   });
 }
 
@@ -17299,10 +17418,10 @@ var streamDeck = {
   },
   /**
    * Connects the plugin to the Stream Deck.
-   * @returns A promise resolved when a connection has been established.
    */
-  connect() {
-    return connection.connect();
+  async connect() {
+    validateSettingsBehavior();
+    await connection.connect();
   }
 };
 var plugin_default = streamDeck;

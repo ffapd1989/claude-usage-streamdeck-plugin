@@ -6,7 +6,7 @@ like and pick a metric per key. Tap any key to force a refresh.
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Platforms](https://img.shields.io/badge/run%20on-macOS%20%7C%20Windows-blue.svg)
-![Stream Deck](https://img.shields.io/badge/Stream%20Deck-6.9%2B-black.svg)
+![Stream Deck](https://img.shields.io/badge/Stream%20Deck-7.1%2B-black.svg)
 ![Node](https://img.shields.io/badge/build%20with-Node%2020%2B-339933.svg)
 [![Elgato Marketplace](https://img.shields.io/badge/Elgato%20Marketplace-Available-d97757.svg)](https://marketplace.elgato.com/product/ai-coding-usage-meter-f4aa1012-a57b-4a02-9b90-a37004678ee7)
 
@@ -62,7 +62,7 @@ overlays and scripts.
 ## Requirements
 
 **To run:** the official [Elgato Stream Deck app](https://www.elgato.com/downloads)
-**6.9 or newer** — it ships the Node runtime the plugin uses, so you do **not**
+**7.1 or newer** — it ships the Node runtime the plugin uses, so you do **not**
 need Node.js installed separately. Runs on **Windows 10+** and **macOS 12+**, and
 on both **Pro and Max** (metrics a plan doesn't report show `--`).
 
@@ -86,7 +86,7 @@ on both **Pro and Max** (metrics a plan doesn't report show `--`).
 
 Or install the packaged file manually:
 
-1. **Stream Deck app 6.9+** installed (see [Requirements](#requirements)).
+1. **Stream Deck app 7.1+** installed (see [Requirements](#requirements)).
 2. Download `com.saeedkolivand.claude-usage.streamDeckPlugin` from the
    [latest release](https://github.com/saeedkolivand/claude-usage-streamdeck-plugin/releases/latest)
    and double-click it → **Install**.
