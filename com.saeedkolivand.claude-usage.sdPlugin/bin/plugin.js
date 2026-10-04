@@ -4869,12 +4869,12 @@ var NEVER = Object.freeze({
 // @__NO_SIDE_EFFECTS__
 function $constructor(name, initializer2, params) {
   function init(inst, def) {
-    var _a3;
+    var _a4;
     Object.defineProperty(inst, "_zod", {
       value: inst._zod ?? {},
       enumerable: false
     });
-    (_a3 = inst._zod).traits ?? (_a3.traits = /* @__PURE__ */ new Set());
+    (_a4 = inst._zod).traits ?? (_a4.traits = /* @__PURE__ */ new Set());
     inst._zod.traits.add(name);
     initializer2(inst, def);
     for (const k in _.prototype) {
@@ -4889,10 +4889,10 @@ function $constructor(name, initializer2, params) {
   }
   Object.defineProperty(Definition, "name", { value: name });
   function _(def) {
-    var _a3;
+    var _a4;
     const inst = params?.Parent ? new Definition() : this;
     init(inst, def);
-    (_a3 = inst._zod).deferred ?? (_a3.deferred = []);
+    (_a4 = inst._zod).deferred ?? (_a4.deferred = []);
     for (const fn of inst._zod.deferred) {
       fn();
     }
@@ -5383,8 +5383,8 @@ function aborted(x, startIndex = 0) {
 }
 function prefixIssues(path5, issues) {
   return issues.map((iss) => {
-    var _a3;
-    (_a3 = iss).path ?? (_a3.path = []);
+    var _a4;
+    (_a4 = iss).path ?? (_a4.path = []);
     iss.path.unshift(path5);
     return iss;
   });
@@ -5523,7 +5523,7 @@ function treeifyError(error40, _mapper) {
   };
   const result = { errors: [] };
   const processError = (error41, path5 = []) => {
-    var _a3, _b;
+    var _a4, _b;
     for (const issue2 of error41.issues) {
       if (issue2.code === "invalid_union" && issue2.errors.length) {
         issue2.errors.map((issues) => processError({ issues }, issue2.path));
@@ -5544,7 +5544,7 @@ function treeifyError(error40, _mapper) {
           const terminal = i === fullpath.length - 1;
           if (typeof el === "string") {
             curr.properties ?? (curr.properties = {});
-            (_a3 = curr.properties)[el] ?? (_a3[el] = { errors: [] });
+            (_a4 = curr.properties)[el] ?? (_a4[el] = { errors: [] });
             curr = curr.properties[el];
           } else {
             curr.items ?? (curr.items = []);
@@ -5757,10 +5757,10 @@ var uppercase = /^[^a-z]*$/;
 
 // node_modules/zod/v4/core/checks.js
 var $ZodCheck = /* @__PURE__ */ $constructor("$ZodCheck", (inst, def) => {
-  var _a3;
+  var _a4;
   inst._zod ?? (inst._zod = {});
   inst._zod.def = def;
-  (_a3 = inst._zod).onattach ?? (_a3.onattach = []);
+  (_a4 = inst._zod).onattach ?? (_a4.onattach = []);
 });
 var numericOriginMap = {
   number: "number",
@@ -5826,8 +5826,8 @@ var $ZodCheckGreaterThan = /* @__PURE__ */ $constructor("$ZodCheckGreaterThan", 
 var $ZodCheckMultipleOf = /* @__PURE__ */ $constructor("$ZodCheckMultipleOf", (inst, def) => {
   $ZodCheck.init(inst, def);
   inst._zod.onattach.push((inst2) => {
-    var _a3;
-    (_a3 = inst2._zod.bag).multipleOf ?? (_a3.multipleOf = def.value);
+    var _a4;
+    (_a4 = inst2._zod.bag).multipleOf ?? (_a4.multipleOf = def.value);
   });
   inst._zod.check = (payload) => {
     if (typeof payload.value !== typeof def.value)
@@ -5953,9 +5953,9 @@ var $ZodCheckBigIntFormat = /* @__PURE__ */ $constructor("$ZodCheckBigIntFormat"
   };
 });
 var $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst, def) => {
-  var _a3;
+  var _a4;
   $ZodCheck.init(inst, def);
-  (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
+  (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.size !== void 0;
   });
@@ -5980,9 +5980,9 @@ var $ZodCheckMaxSize = /* @__PURE__ */ $constructor("$ZodCheckMaxSize", (inst, d
   };
 });
 var $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst, def) => {
-  var _a3;
+  var _a4;
   $ZodCheck.init(inst, def);
-  (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
+  (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.size !== void 0;
   });
@@ -6007,9 +6007,9 @@ var $ZodCheckMinSize = /* @__PURE__ */ $constructor("$ZodCheckMinSize", (inst, d
   };
 });
 var $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", (inst, def) => {
-  var _a3;
+  var _a4;
   $ZodCheck.init(inst, def);
-  (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
+  (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.size !== void 0;
   });
@@ -6037,9 +6037,9 @@ var $ZodCheckSizeEquals = /* @__PURE__ */ $constructor("$ZodCheckSizeEquals", (i
   };
 });
 var $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (inst, def) => {
-  var _a3;
+  var _a4;
   $ZodCheck.init(inst, def);
-  (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
+  (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.length !== void 0;
   });
@@ -6066,9 +6066,9 @@ var $ZodCheckMaxLength = /* @__PURE__ */ $constructor("$ZodCheckMaxLength", (ins
   };
 });
 var $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (inst, def) => {
-  var _a3;
+  var _a4;
   $ZodCheck.init(inst, def);
-  (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
+  (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.length !== void 0;
   });
@@ -6095,9 +6095,9 @@ var $ZodCheckMinLength = /* @__PURE__ */ $constructor("$ZodCheckMinLength", (ins
   };
 });
 var $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals", (inst, def) => {
-  var _a3;
+  var _a4;
   $ZodCheck.init(inst, def);
-  (_a3 = inst._zod.def).when ?? (_a3.when = (payload) => {
+  (_a4 = inst._zod.def).when ?? (_a4.when = (payload) => {
     const val = payload.value;
     return !nullish(val) && val.length !== void 0;
   });
@@ -6126,7 +6126,7 @@ var $ZodCheckLengthEquals = /* @__PURE__ */ $constructor("$ZodCheckLengthEquals"
   };
 });
 var $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat", (inst, def) => {
-  var _a3, _b;
+  var _a4, _b;
   $ZodCheck.init(inst, def);
   inst._zod.onattach.push((inst2) => {
     const bag = inst2._zod.bag;
@@ -6137,7 +6137,7 @@ var $ZodCheckStringFormat = /* @__PURE__ */ $constructor("$ZodCheckStringFormat"
     }
   });
   if (def.pattern)
-    (_a3 = inst._zod).check ?? (_a3.check = (payload) => {
+    (_a4 = inst._zod).check ?? (_a4.check = (payload) => {
       def.pattern.lastIndex = 0;
       if (def.pattern.test(payload.value))
         return;
@@ -6338,7 +6338,7 @@ var version = {
 
 // node_modules/zod/v4/core/schemas.js
 var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
-  var _a3;
+  var _a4;
   inst ?? (inst = {});
   inst._zod.def = def;
   inst._zod.bag = inst._zod.bag || {};
@@ -6353,7 +6353,7 @@ var $ZodType = /* @__PURE__ */ $constructor("$ZodType", (inst, def) => {
     }
   }
   if (checks.length === 0) {
-    (_a3 = inst._zod).deferred ?? (_a3.deferred = []);
+    (_a4 = inst._zod).deferred ?? (_a4.deferred = []);
     inst._zod.deferred?.push(() => {
       inst._zod.run = inst._zod.parse;
     });
@@ -13719,7 +13719,7 @@ var JSONSchemaGenerator = class {
     this.seen = /* @__PURE__ */ new Map();
   }
   process(schema, _params = { path: [], schemaPath: [] }) {
-    var _a3;
+    var _a4;
     const def = schema._zod.def;
     const formatMap = {
       guid: "uuid",
@@ -14181,7 +14181,7 @@ var JSONSchemaGenerator = class {
       delete result.schema.default;
     }
     if (this.io === "input" && result.schema._prefault)
-      (_a3 = result.schema).default ?? (_a3.default = result.schema._prefault);
+      (_a4 = result.schema).default ?? (_a4.default = result.schema._prefault);
     delete result.schema._prefault;
     const _result = this.seen.get(schema);
     return _result.schema;
@@ -18163,13 +18163,12 @@ function iconMarkup(icon, x, y, sizePx, stroke) {
     `<rect x="1.5" y="3" width="13" height="11.5" rx="2"/><path d="M5 1.5v3M11 1.5v3M1.5 7h13"/>`
   );
 }
-function pageDots(face, faces, accent, cx) {
+function pageDots(face, faces, accent, cx, cy = 138, gap = 14, r = 3.5) {
   if (!faces || faces <= 1) return "";
-  const gap = 14;
   const x0 = cx - (faces - 1) * gap / 2;
   let out = "";
   for (let i = 0; i < faces; i++) {
-    out += `<circle cx="${x0 + i * gap}" cy="138" r="3.5" fill="${i === (face ?? 0) ? accent : "#4b5563"}"/>`;
+    out += `<circle cx="${x0 + i * gap}" cy="${cy}" r="${r}" fill="${i === (face ?? 0) ? accent : "#4b5563"}"/>`;
   }
   return out;
 }
@@ -18339,6 +18338,106 @@ function svgDial(opts) {
   ${opts.stale ? `<circle cx="190" cy="11" r="3.5" fill="#f59e0b"/>` : ""}
 </svg>`;
 }
+function flag(v, d) {
+  return v == null || v === "" ? d : String(v) !== "false";
+}
+function infobarShow(s) {
+  return {
+    icon: flag(s.infoIcon, true),
+    bar: flag(s.infoBar, true),
+    countdown: flag(s.infoCountdown, true),
+    dots: flag(s.infoDots, true)
+  };
+}
+function summaryFaces(s) {
+  const want = {
+    session: flag(s.infoSumSession, true),
+    weekly: flag(s.infoSumWeekly, true),
+    model_weekly: flag(s.infoSumModel, false)
+  };
+  return FACES.filter((f) => want[f.id]);
+}
+function alertJump(order, pcts, crit, latch, prefix) {
+  let jump = null;
+  order.forEach((f, i) => {
+    if (!f.metric) return;
+    const k = prefix + f.metric;
+    const pct = pcts[f.metric];
+    const above = pct != null && pct >= crit;
+    if (above && !latch.get(k) && jump == null) jump = i;
+    latch.set(k, above);
+  });
+  return jump;
+}
+function jumpHoldSec(s) {
+  const sec = numOr(s.carouselSec, 10);
+  return sec > 0 ? Math.min(3600, Math.max(1, sec)) : 10;
+}
+var INFOBAR_DOT_GAP = 8;
+function infobarDots(face, faces, accent) {
+  const n = faces ?? 0;
+  return pageDots(face, faces, accent, 220 - (n - 1) * INFOBAR_DOT_GAP / 2, 10, INFOBAR_DOT_GAP, 2);
+}
+function infobarTextEnd(dots, faces) {
+  return dots ? 220 - ((faces ?? 1) - 1) * INFOBAR_DOT_GAP - 8 : 224;
+}
+function svgInfobar(opts) {
+  const accent = opts.accent || "#9ca3af";
+  const pctNum = opts.pct == null ? "--" : `${Math.round(opts.pct)}`;
+  const pctSize = pctNum.length >= 3 ? 30 : 34;
+  const x0 = 84;
+  const barW = 224 - x0;
+  const dots = opts.show.dots ? infobarDots(opts.face, opts.faces, accent) : "";
+  const icon = opts.show.icon && opts.icon ? iconMarkup(opts.icon, x0, 4, 12, accent) : "";
+  const labelX = icon ? x0 + 16 : x0;
+  const labelAvail = infobarTextEnd(dots, opts.faces) - labelX;
+  let labelSize = 11;
+  while (labelSize > 8 && textWidthEm(opts.label) * labelSize * 1.08 + opts.label.length * 1.5 > labelAvail) labelSize -= 1;
+  let noteSize = 12;
+  while (noteSize > 9 && textWidthEm(opts.note) * noteSize * 1.08 > barW) noteSize -= 1;
+  const p = opts.pct == null ? 0 : Math.max(0, Math.min(100, opts.pct));
+  const fillW = p / 100 * barW;
+  const bar = opts.show.bar ? `<rect x="${x0}" y="21" width="${barW}" height="8" rx="4" fill="#2a313d"/>` + (fillW > 0 ? `<rect x="${x0}" y="21" width="${fillW.toFixed(1)}" height="8" rx="4" fill="${opts.col}"/>` : "") : "";
+  const note = opts.show.countdown && opts.note ? `<text x="${x0}" y="44" font-family="Arial, Helvetica, sans-serif" font-size="${noteSize}" font-weight="700" fill="${opts.stale ? "#f59e0b" : opts.noteCol || "#e5e7eb"}">${esc2(opts.note)}</text>` : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="232" height="50" viewBox="0 0 232 50">
+  <rect width="232" height="50" fill="${opts.bg || "#0f1216"}"/>
+  <text x="8" y="39" font-family="Arial, Helvetica, sans-serif" font-size="${pctSize}" font-weight="800" fill="${opts.col}">${esc2(pctNum)}${opts.pct == null ? "" : `<tspan font-size="${Math.round(pctSize * 0.5)}" font-weight="700">%</tspan>`}</text>
+  ${icon}
+  <text x="${labelX}" y="14" font-family="Arial, Helvetica, sans-serif" font-size="${labelSize}" font-weight="700" letter-spacing="1.5" fill="${accent}">${esc2(opts.label)}</text>
+  ${dots}
+  ${bar}
+  ${note}
+</svg>`;
+}
+function svgInfobarSummary(opts) {
+  const n = opts.cols.length;
+  let body;
+  if (!n) {
+    body = iconMarkup("badge", 116 - 21, 4, 42, BADGE_COLOR);
+  } else {
+    const colW = 232 / n;
+    const pad = 5;
+    const w = colW - 2 * pad;
+    const pctSize = n >= 3 ? 20 : 22;
+    body = opts.cols.map((c, i) => {
+      const x0 = i * colW + pad;
+      const divider = i ? `<rect x="${(i * colW - 0.5).toFixed(1)}" y="8" width="1" height="34" fill="#2a313d"/>` : "";
+      let labelSize = 12;
+      while (labelSize > 9 && textWidthEm(c.label) * labelSize * 1.08 > w) labelSize -= 1;
+      const icon = opts.show.icon ? iconMarkup(c.icon, x0, 22, 14, c.accent) : "";
+      const pctX = icon ? x0 + 18 : x0;
+      const pctNum = c.pct == null ? "--" : `${Math.round(c.pct)}`;
+      const p = c.pct == null ? 0 : Math.max(0, Math.min(100, c.pct));
+      const fillW = p / 100 * w;
+      const bar = opts.show.bar ? `<rect x="${x0.toFixed(1)}" y="42" width="${w.toFixed(1)}" height="4" rx="2" fill="#2a313d"/>` + (fillW > 0 ? `<rect x="${x0.toFixed(1)}" y="42" width="${fillW.toFixed(1)}" height="4" rx="2" fill="${c.col}"/>` : "") : "";
+      return divider + `<text x="${x0.toFixed(1)}" y="13" font-family="Arial, Helvetica, sans-serif" font-size="${labelSize}" font-weight="700" fill="${c.accent}">${esc2(c.label)}</text>` + icon + `<text x="${pctX.toFixed(1)}" y="36" font-family="Arial, Helvetica, sans-serif" font-size="${pctSize}" font-weight="800" fill="${c.col}">${esc2(pctNum)}${c.pct == null ? "" : `<tspan font-size="${Math.round(pctSize * 0.5)}" font-weight="700">%</tspan>`}</text>` + bar;
+    }).join("\n  ");
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="232" height="50" viewBox="0 0 232 50">
+  <rect width="232" height="50" fill="${opts.bg || "#0f1216"}"/>
+  ${body}
+</svg>`;
+}
 
 // src/plugin.ts
 function hexOf(v) {
@@ -18416,7 +18515,7 @@ function badgeImage(path5) {
   }
 }
 function syncCarousel(act, s) {
-  const isCarousel = (s.metric || "session") === "carousel";
+  const isCarousel = act.isNeoInfobar?.() || (s.metric || "session") === "carousel";
   const st = carousel.get(act.id);
   if (st?.timer) clearTimeout(st.timer);
   if (!isCarousel) {
@@ -18446,6 +18545,7 @@ function profileFor(s) {
   return resolveProfile(s.profile, extra ? [extra] : []);
 }
 async function draw(act, s) {
+  if (act.isNeoInfobar?.()) return drawInfobar(act, s);
   if (typeof act.setFeedback === "function") return drawDial(act, s);
   const metric = s.metric || "session";
   if (metric === "carousel") return drawCarousel(act, s);
@@ -18599,11 +18699,25 @@ async function drawDial(act, s) {
     stale: !!stale
   });
 }
-async function drawCarousel(act, s) {
-  const ua = s.userAgent && s.userAgent.trim() || DEFAULT_UA;
-  const { data, error: error40, stale } = await fetchUsage(ua, false, profileFor(s) ?? void 0);
+function numberFace(f, s, res) {
   const warn = num(s.warn, 50);
   const crit = num(s.crit, 80);
+  const label = (faceLabelOf(f, s) || "").trim() || f.label;
+  const pal = facePalette(f, s);
+  const look = { accent: pal.accent, icon: f.icon, noteCol: pal.noteCol };
+  if (!res.data) {
+    const note2 = res.error === "no-token" || res.error === "token-expired" ? "open Claude" : res.error === "network" ? "offline" : "\u2026";
+    return { label, pct: null, note: note2, col: color(null, warn, crit), stale: true, ...look };
+  }
+  const { label: apiLabel, pct, resetsAt } = pickMetric(res.data, f.metric);
+  const shown = f.id === "model_weekly" && !(faceLabelOf(f, s) || "").trim() && apiLabel ? apiLabel.toUpperCase() : label;
+  const note = pct == null ? "n/a here" : untilText(resetsAt);
+  const col = pct != null && pct >= warn ? color(pct, warn, crit) : pal.pctCol;
+  return { label: shown, pct, note, col, stale: !!res.stale, ...look };
+}
+async function drawCarousel(act, s) {
+  const ua = s.userAgent && s.userAgent.trim() || DEFAULT_UA;
+  const res = await fetchUsage(ua, false, profileFor(s) ?? void 0);
   const order = faceOrder(s);
   const faces = order.length;
   const face = (carousel.get(act.id)?.face ?? startFace(s)) % faces;
@@ -18622,51 +18736,43 @@ async function drawCarousel(act, s) {
     );
     return;
   }
-  const label = (faceLabelOf(f, s) || "").trim() || f.label;
-  const pal = facePalette(f, s);
-  if (!data) {
-    const note2 = error40 === "no-token" || error40 === "token-expired" ? "open Claude" : error40 === "network" ? "offline" : "\u2026";
-    await act.setImage(
-      toDataUri(
-        svgBig({
-          label,
-          pct: null,
-          note: note2,
-          col: color(null, warn, crit),
-          stale: true,
-          bg: bgOf(s),
-          face,
-          faces,
-          accent: pal.accent,
-          icon: f.icon,
-          noteCol: pal.noteCol
-        })
-      )
-    );
+  const v = numberFace(f, s, res);
+  if (res.data) maybeAlert(act, s, f.metric, v.pct, num(s.crit, 80));
+  await act.setImage(toDataUri(svgBig({ ...v, bg: bgOf(s), face, faces })));
+}
+function holdFace(act, s, face) {
+  const st = carousel.get(act.id) ?? { face: startFace(s), start: s.carouselStart };
+  if (st.timer) clearTimeout(st.timer);
+  st.face = face;
+  carousel.set(act.id, st);
+  if (carouselAuto(s)) {
+    syncCarousel(act, s);
     return;
   }
-  const { label: apiLabel, pct, resetsAt } = pickMetric(data, f.metric);
-  maybeAlert(act, s, f.metric, pct, crit);
-  const shown = f.id === "model_weekly" && !(faceLabelOf(f, s) || "").trim() && apiLabel ? apiLabel.toUpperCase() : label;
-  const note = pct == null ? "n/a here" : untilText(resetsAt);
-  const col = pct != null && pct >= warn ? color(pct, warn, crit) : pal.pctCol;
-  await act.setImage(
-    toDataUri(
-      svgBig({
-        label: shown,
-        pct,
-        note,
-        col,
-        stale: !!stale,
-        bg: bgOf(s),
-        face,
-        faces,
-        accent: pal.accent,
-        icon: f.icon,
-        noteCol: pal.noteCol
-      })
-    )
-  );
+  st.timer = setTimeout(() => {
+    st.timer = void 0;
+    st.face = startFace(s);
+    draw(act, s).catch(() => {
+    });
+  }, jumpHoldSec(s) * 1e3);
+}
+async function drawInfobar(act, s) {
+  const ua = s.userAgent && s.userAgent.trim() || DEFAULT_UA;
+  const res = await fetchUsage(ua, false, profileFor(s) ?? void 0);
+  const order = faceOrder(s);
+  const data = res.data;
+  if (data && String(s.alertFlash) !== "false") {
+    const pcts = Object.fromEntries(
+      order.filter((f2) => f2.metric).map((f2) => [f2.metric, pickMetric(data, f2.metric).pct])
+    );
+    const jump = alertJump(order, pcts, num(s.crit, 80), alerted, act.id + ":");
+    if (jump != null) holdFace(act, s, jump);
+  }
+  const faces = order.length;
+  const face = (carousel.get(act.id)?.face ?? startFace(s)) % faces;
+  const f = order[face];
+  const svg = f.id === "badge" ? svgInfobarSummary({ bg: bgOf(s), show: infobarShow(s), cols: summaryFaces(s).map((sf) => numberFace(sf, s, res)) }) : svgInfobar({ ...numberFace(f, s, res), bg: bgOf(s), face, faces, show: infobarShow(s) });
+  await act.setFeedback({ canvas: toDataUri(svg) });
 }
 async function drawGauge(act, s, metric) {
   const ua = s.userAgent && s.userAgent.trim() || DEFAULT_UA;
@@ -18860,8 +18966,20 @@ var UsageDial = class extends (_a2 = SingletonAction) {
 _init2 = __decoratorStart(_a2);
 UsageDial = __decorateElement(_init2, 0, "UsageDial", _UsageDial_decorators, UsageDial);
 __runInitializers(_init2, 1, UsageDial);
+var _UsageInfobar_decorators, _init3, _a3;
+_UsageInfobar_decorators = [action({ UUID: "com.saeedkolivand.claude-usage.infobar" })];
+var UsageInfobar = class extends (_a3 = UsageMeter) {
+  async onWillAppear(ev) {
+    if (ev.action.isNeoInfobar()) await ev.action.setFeedbackLayout("layouts/infobar.json");
+    await super.onWillAppear(ev);
+  }
+};
+_init3 = __decoratorStart(_a3);
+UsageInfobar = __decorateElement(_init3, 0, "UsageInfobar", _UsageInfobar_decorators, UsageInfobar);
+__runInitializers(_init3, 1, UsageInfobar);
 plugin_default.actions.registerAction(new UsageMeter());
 plugin_default.actions.registerAction(new UsageDial());
+plugin_default.actions.registerAction(new UsageInfobar());
 plugin_default.connect();
 setTimeout(() => refreshAll(false).catch(() => {
 }), 1500);
